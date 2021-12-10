@@ -1,6 +1,6 @@
 # gradSLAM-RGB-D-Completion
 
-[gradSLAM] (https://gradslam.github.io/) is a fully differentiable dense SLAM framework, i.e., it allows for gradient flow from the outputs of an RGB-D SLAM system (trajectory, 3D map of the environment) all the way through to its inputs (color and depth images). This project is based on leveraging pixel level gradient information backpropagated by gradSLAM to recover missing color and depth observations from an image sequence.
+[gradSLAM](https://gradslam.github.io/) is a fully differentiable dense SLAM framework, i.e., it allows for gradient flow from the outputs of an RGB-D SLAM system (trajectory, 3D map of the environment) all the way through to its inputs (color and depth images). This project is based on leveraging pixel level gradient information backpropagated by gradSLAM to recover missing color and depth observations from an image sequence.
 
 We are given a sequence of four RGB-D images {(I​1, ​D​1)​, (I​2, ​D​2)​, (I​3,​ D​3)​, (I​4, ​D​4)​} along with the camera intrinsics and the ground-truth extrinsics (i.e., camera poses). The fourth RGB-D pair (I​4,​ D​4)​ is corrupted by adding noise or replacing it entirely with a constant value. The goal is to leverage gradients from gradSLAM to reconstruct (I​4,​ D​4)​ without directly accessing this RGB-D pair. The process can be visualized as follows:
 
@@ -33,7 +33,10 @@ In this experiment, the fourth RGB-D image is corrupted by intializing with a un
 ## Using PyTorch-3D for RGB recovery
 
 We render the corrupted as well as the ground-truth point clouds using a differentiable point cloud renderer provided by [PyTorch3D](https://pytorch3d.org) and find the [Perceptual Similarity](https://github.com/richzhang/PerceptualSimilarity) metric between the 2 RGB images obtained upon rendering. We use this loss to optimize the corrupted fourth RGB image.
-In this following visualization, the fourth RGB-D image is corrupted by intializing with a uniform gaussian noise image.
+In the following visualization, the fourth RGB-D image is corrupted by intializing with a uniform gaussian noise image.
+
+https://user-images.githubusercontent.com/48653063/145542332-1861f517-6be3-4b68-b60f-949b87f87bb3.mp4
+
 
 ## Running Experiments
 
@@ -43,7 +46,7 @@ For running the optimization experiments, please look at the [gradSLAM_Optimizat
 ``` 
 !pip install -q 'git+https://github.com/gradslam/gradslam.git' 
 !git clone https://github.com/sreesai1412/gradSLAM-RGB-D-Completion.git
-%cd /content/fradSLAM-RGB-D-Completion
+%cd /content/gradSLAM-RGB-D-Completion
 !python main.py --save_dir='/content/' --experiment
 ```
 Here, the --experiment flag can be 'constant_value', 'uniform_noise' or 'slight_noise'
