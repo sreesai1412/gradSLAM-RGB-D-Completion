@@ -81,47 +81,7 @@ if __name__ == "__main__":
 	ICL_data_path = './ICL/living_room_traj1_frei_png/'
 	adversarials_path = './ICL/living_room_traj1_frei_png/adversarial_data/living_room_traj1_frei_png/'
 
-	if opt.experiment.lower() == 'semantic':
-		seg_mask = np.load(adversarials_path+'segmentation_mask.npy') # Load Semantic Segmentation mask
-		pillow_mask = seg_mask==17 # Get Pillow only mask
-
-		# Overlay RGB Pillow Mask on orginal rgb after shifting by 200 pixels
-
-		rgb = imageio.imread(adversarials_path+'rgb/3_org.png')
-		pillows = pillow_mask.reshape(rgb.shape[0],rgb.shape[1],1)*rgb
-
-		rgb_mask = pillows
-		y1, y2 = 0, 0 + rgb.shape[0]
-		x1, x2 = 200, 200 + rgb.shape[1]
-
-		alpha_s = pillow_mask[:,:(rgb.shape[1]-200)].reshape(rgb.shape[0],rgb.shape[1]-200,1)
-		alpha_l = 1.0 - alpha_s
-
-		adv_rgb = rgb
-
-		adv_rgb[:, x1:] = ((alpha_s * rgb_mask[:,:(rgb.shape[1]-200)])+
-					      alpha_l * rgb[:, x1:])
-
-		imageio.imwrite(adversarials_path+'rgb/3.png',adv_rgb)
-
-		# Overlay Depth Pillow Mask on orginal depth after shifting by 200 pixels
-
-		depth = cv2.imread(adversarials_path+'depth/3_org.png',cv2.IMREAD_UNCHANGED)
-		depth_mask = pillow_mask*depth
-		y1, y2 = 0, 0 + depth.shape[0]
-		x1, x2 = 200, 200 + depth.shape[1]
-
-		alpha_s = pillow_mask[:,:(depth.shape[1]-200)]
-		alpha_l = 1.0 - alpha_s
-
-		adv_depth = depth
-
-		adv_depth[:, x1:] = ((alpha_s * depth_mask[:,:(depth.shape[1]-200)])+
-					      alpha_l * depth[:, x1:])
-
-		cv2.imwrite(adversarials_path+'depth/3.png',adv_depth.astype(np.uint16))
-
-	elif opt.experiment.lower() == 'uniform_noise':
+	if opt.experiment.lower() == 'uniform_noise':
 
 		# Creating RGB Uniform Noise Image
 
@@ -168,22 +128,7 @@ if __name__ == "__main__":
 		d_image = np.zeros((480,640),dtype=np.uint16)
 		d_image.fill(10015)
 		cv2.imwrite(adversarials_path+'depth/3.png', d_image.astype(np.uint16))
-
-	elif opt.experiment.lower() == 'salt_pepper':
-
-		# Creating Salt & Pepper Gaussian Noise RGB Image
-		image = cv2.imread(adversarials_path+'rgb/3_org.png')
-		uniform_noise = np.zeros((image.shape[0], image.shape[1]),dtype=np.uint8)
-
-		cv2.randu(uniform_noise,0,255)
-
-		uniform_noise = np.repeat(uniform_noise.astype(np.uint8).reshape(image.shape[0],image.shape[1],1), 3, axis=2)
-
-		cv2.imwrite(adversarials_path+'rgb/3.png', uniform_noise)
-
-		# Original Depth Image
-		depth = cv2.imread(adversarials_path+'depth/3_org.png',cv2.IMREAD_UNCHANGED)
-		cv2.imwrite(adversarials_path+'depth/3.png',depth.astype(np.uint16))
+		
 	else:
 		raise Exception('Unknown experiment')
 
