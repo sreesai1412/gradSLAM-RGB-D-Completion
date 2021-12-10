@@ -25,7 +25,7 @@ from chamferdist.chamfer import knn_points
 from skimage.metrics import structural_similarity as ssim
 from skimage.metrics import mean_squared_error
 
-parser = argparse.ArgumentParser(description='RGB-D-Recovery-GradSLAM-Parallel-Optimization')
+parser = argparse.ArgumentParser(description='RGB-D-Recovery-gradSLAM-Optimization')
 parser.add_argument('--experiment', type=str, default='uniform_noise', help='Experiment', choices=['semantic', 'uniform_noise', 'slight_noise', 'constant_value', 'salt_pepper'])
 parser.add_argument('--save_dir', type=str, default='none', help='Directory to save results')
 parser.add_argument('--nocuda', action='store_true', help='Dont use cuda')
