@@ -7,7 +7,8 @@ We are given a sequence of four RGB-D images {(I​1, ​D​1)​, (I​2, ​D
 <img src="https://github.com/sreesai1412/gradSLAM-RGB-D-Completion/blob/main/assets/schema.png" />
 
 ## Experiments & Results
-Various initialization experiments are performed to gain insights on the optimization performance for both RGB and 16-bit depth images. First, we consider the first 4 RGB-D images from the ICL-NUIM dataset and obtain the ground truth 3D scene reconstruction as a pointcloud using PointFusion. Then, by corrupting the fourth RGB-D image in different ways various initialization experiments are performed to gain insights on the optimization performance for both RGB and 16-bit depth images. \\
+Various initialization experiments are performed to gain insights on the optimization performance for both RGB and 16-bit depth images. First, we consider the first 4 RGB-D images from the ICL-NUIM dataset and obtain the ground truth 3D scene reconstruction as a pointcloud using PointFusion. Then, by corrupting the fourth RGB-D image in different ways various initialization experiments are performed to gain insights on the optimization performance for both RGB and 16-bit depth images.
+
 Across all the experiments, two loss terms are used for the optimization. For optimization of depth images is performed using Chamfer distance between the ground truth pointcloud and the corrupted pointcloud (obtained using the the first 3 ground truth RGB-D image and the corrupted fourth image).
 For RGB optimization, the nearest neighbours point (in the ground truth pointcloud) of each point in the corrupted pointcloud is found out and absolute error between their colors is used as the loss.
 The experimental results and insights gathered from the project show us that gradient information from gradSLAM is spatially rich. 
